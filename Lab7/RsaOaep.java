@@ -52,9 +52,9 @@ public class RsaOaep
             Security.addProvider(new BouncyCastleProvider());
         }
 
-		String certFile = System.getProperty("user.dir") + "\\src\\pub.cer";
-		String privKeyFile = System.getProperty("user.dir") + "\\src\\unknown-priv.pem";
-        char[] privKeyPasswd = new String("cryptomadness").toCharArray();
+	String certFile = System.getProperty("user.dir") + "\\src\\pub.cer";
+	String privKeyFile = System.getProperty("user.dir") + "\\src\\unknown-priv.pem";
+        char[] privKeyPasswd = new String("password").toCharArray(); // password of the unknown-priv.pem
         byte[] data = "This is a test message.".getBytes();
         String p7envFile = "pkcs7envdata.p7m";
         String p7sigFile = "pkcs7sigdata.p7m";
@@ -113,7 +113,7 @@ public class RsaOaep
 		CMSEnvelopedDataGenerator cmsEnvelopedDataGenerator = new CMSEnvelopedDataGenerator();
 
 		// specify RSA-OAEP parameters lect_7b slide 6
-		byte[] label = new String("label").getBytes();
+		byte[] label = new String("label").getBytes(); // optional label, default NULL
 		PSpecified p = new PSpecified(label);
 		OAEPParameterSpec oaepSpec = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, p);
 		JcaAlgorithmParametersConverter paramsConverter = new JcaAlgorithmParametersConverter();
@@ -204,6 +204,7 @@ public class RsaOaep
 		return signedData;
 	}
 
+	// Encoding CMS and store as a pem file
 	public void writeEncodedPKCS7CmsFile(String p7File, byte[] pkcs7Encoded) 
 		throws Exception
 	{
